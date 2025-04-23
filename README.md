@@ -1,3 +1,4 @@
+```mermaid
 graph TD
     A[Policy Document]
     A --> B[Version = 2012-10-17]
@@ -7,6 +8,7 @@ graph TD
     D --> F[Effect = Allow]
     D --> G[Principal]
     G --> H[Service = lambda.amazonaws.com]
+```
 
 ```mermaid
   info
