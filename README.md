@@ -1,12 +1,12 @@
 # Were to start with recommended security settings and controls for Startup & AWS Org
 
-## [AWS Startup Security Baseline](https://docs.aws.amazon.com/prescriptive-guidance/latest/aws-startup-security-baseline/welcome.html)
-## Above but with terraform:
-### [How to implement baseline AWS security with Terraform p1](https://blog.avangards.io/how-to-implement-aws-ssb-controls-in-terraform-part-1)
-### [How to implement baseline AWS security with Terraform p2](https://blog.avangards.io/how-to-implement-aws-ssb-controls-in-terraform-part-2)
-### [How to implement baseline AWS security with Terraform p3](https://blog.avangards.io/how-to-implement-aws-ssb-controls-in-terraform-part-3)
-### [How to implement baseline AWS security with Terraform p4](https://blog.avangards.io/how-to-implement-aws-ssb-controls-in-terraform-part-4)
-## Individual detective services
+- [AWS Startup Security Baseline](https://docs.aws.amazon.com/prescriptive-guidance/latest/aws-startup-security-baseline/welcome.html)
+- Above but with terraform:
+  - [How to implement baseline AWS security with Terraform p1](https://blog.avangards.io/how-to-implement-aws-ssb-controls-in-terraform-part-1)
+  - [How to implement baseline AWS security with Terraform p2](https://blog.avangards.io/how-to-implement-aws-ssb-controls-in-terraform-part-2)
+  - [How to implement baseline AWS security with Terraform p3](https://blog.avangards.io/how-to-implement-aws-ssb-controls-in-terraform-part-3)
+   - [How to implement baseline AWS security with Terraform p4](https://blog.avangards.io/how-to-implement-aws-ssb-controls-in-terraform-part-4)
+- Individual detective services
 ### AWS Guard Duty
 Amazon GuardDuty 
 
@@ -29,19 +29,20 @@ Amazon Inspector is an automated vulnerability management service that continual
 To learn more, see Inspector
 <IMG>
 ______
-# Guard Duty Intro & Udemy video
-## Guard Duty Terraform resources
-### aws_guradduty_detector 
-### aws_guardduty_publishing_destination
-### aws_guardduty_threatintelset 
-### aws_guardduty_organization_configuration
-### aws_guardduty_organization_configuration_feature
-### aws_guardduty_member
-### aws_guardduty_invite_accepter 
-### aws_guardduty_ipset
+- Guard Duty Intro & Udemy video
+### Guard Duty Terraform resources
+- aws_guradduty_detector
+- aws_guardduty_detector_feature
+- aws_guardduty_publishing_destination
+- aws_guardduty_threatintelset 
+- aws_guardduty_organization_configuration
+- aws_guardduty_organization_configuration_feature
+- aws_guardduty_member
+- aws_guardduty_invite_accepter 
+- aws_guardduty_ipset
 ___________________
-## [Guard Duty Terraform code creation youtube video](https://www.youtube.com/watch?v=pKuDpeLFxtI&t=939s)
-### [How to manage AWS Guard Duty with Terraform](https://blog.avangards.io/how-to-manage-amazon-guardduty-in-aws-organizations-using-terraform)
+- [Guard Duty Terraform code creation youtube video](https://www.youtube.com/watch?v=pKuDpeLFxtI&t=939s)
+- [How to manage AWS Guard Duty with Terraform](https://blog.avangards.io/how-to-manage-amazon-guardduty-in-aws-organizations-using-terraform)
 _________________  
 
 * 
