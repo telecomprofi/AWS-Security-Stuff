@@ -2,13 +2,13 @@ README.md
 ```mermaid
 graph TD
     A[Policy Document]
-    A --> B[Version: "2012-10-17"]
+    A --> B[Version = 2012-10-17]
     A --> C[Statement]
     C --> D[Statement[0]]
-    D --> E[Action: "sts:AssumeRole"]
-    D --> F[Effect: "Allow"]
+    D --> E[Action = sts:AssumeRole]
+    D --> F[Effect = Allow]
     D --> G[Principal]
-    G --> H[Service: "lambda.amazonaws.com"]
+    G --> H[Service = lambda.amazonaws.com]
 ```
 
 
