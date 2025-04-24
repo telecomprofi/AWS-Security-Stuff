@@ -18,6 +18,24 @@ To learn more, see Amazon GuardDuty
 There is an [option to manage GuarDuty with AWS Organizations](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty_organizations.html) through delegated GuardDuty Admin AWS account - add members, enable Protection plans, suspend/disable GD in indovidual AWS accounts etc.
 Guard Duty has to be enabled on per region basis. Auto-Enable for new Accounts is configurable.
 ![image](https://github.com/user-attachments/assets/f00f1590-4fd4-4975-82bf-cb27a660436b)
+
+#### Confusion with Terraform and Guard Duty
+In mid 2023 [Guard Duty API was changed by Amazon](https://docs.aws.amazon.com/guardduty/latest/ug/guardduty-feature-object-api-changes-march2023.html) and pre-2023 datasources were replaced with features. Hence lot of confusion between old information/terraform resources and the new ones. 
+Moreover there are so-called *Advanced Terraform Resources* like 
+```
+aws_guardduty_organization_configuration
+```
+which causes *"...Terraform to automatically assume management of the GuardDuty Organization Configuration without import and perform no actions on removal from the Terraform configuration."*
+sigh
+
+You have been warned.
+Known side effects of using terraform resources to manage Guard Duty:
+One  can  use the aws_guardduty_organization_admin_account resource to set the delegated administrator. However it causes following in the Audit account:
+
+After this resource is created, GuardDuty will be enabled with both the foundational data sources and all protection plans enabled.
+When the resource is deleted, GuardDuty remains enabled.
+
+These side effects are not desirable since we would ideally want full control over the lifecycle and configuration of GuardDuty in Terraform. To address this issue, we will preemptively enable GuardDuty in the Audit account using the aws_guardduty_detector resource. We will also manage the protection plans using the aws_guardduty_detector_feature resource in subsequent steps after we define the org-wide settings.
 __________
 
 ### AWS Security Hub
