@@ -165,3 +165,69 @@ graph TD
     H -- Grants least-privilege access --> F
     F -- Accesses Provisioned Infra --> K
 ```
+
+```mermaid
+graph TD
+    subgraph "Developer"
+        A[Developer pushes code or score.yaml changes to AppRepo] --> B{GitHub Actions Pipeline};
+    end
+
+    subgraph "Platform Engineer"
+        C[Manages Resource Definitions in 'platform-resource' repo] --> D(Humanitec Orchestrator);
+        E[Manages Terraform IaC in 'platform' repo] --> F(GitHub 'platform' Repo);
+    end
+
+    subgraph "CI/CD Pipeline"
+        B -- 1 Build & Push --> G[Amazon ECR];
+        B -- 2 Inform Build --> D;
+        B -- 3 Deploy Command --> D;
+    end
+
+    subgraph "Humanitec SaaS"
+        D -- Merges context from AppRepo, platform-resource repo & Deploy command --> H(Generates Deployment Plan);
+        H -- 'call-home' via Agent --> I(Humanitec Agent);
+    end
+
+    subgraph "Customer AWS Account"
+        subgraph "EKS Cluster (Private)"
+            I -- Delivers CRDs --> J(EKS API Server - Private Endpoint);
+            K(Humanitec Operator) -- Watches for CRDs --> J;
+            K -- Starts opentofu-container-runner Job --> J;
+            L(opentofu-container-runner Pod) -- Executes Job --> J;
+            M(Application Pod) -- Deployed --> J;
+            N(Pod Identity) -- Authenticates Pods --> O(AWS IAM);
+        end
+        subgraph "AWS Services"
+            O;
+            P[AWS Secrets Manager];
+            Q[Provisioned Infrastructure e.g., RDS];
+            G;
+        end
+    end
+
+    subgraph "External Services"
+        F;
+        R[GitHub Deploy Token for 'platform' repo];
+    end
+
+    %% --- Connections & Data Flow ---
+    D -- Provides Cloud Account Details & Secrets Config --> K;
+    K -- Assumes Role via Pod Identity --> O;
+    O -- Grants access --> K;
+    K -- Retrieves secrets --> P;
+    P -- Provides Secrets --> K;
+    K -- Creates K8s Secrets --> J;
+
+    L -- Uses GitHub Deploy Token --> R;
+    R -- Grants Access --> F;
+    L -- Checks out Terraform code --> F;
+    H -- Provides Cloud Account Details --> L;
+    L -- Assumes IAM Role via External ID --> O;
+    O -- Grants Temporary Credentials --> L;
+    L -- Uses Temp Credentials to provision --> Q;
+
+    M -- Mounts K8s Secrets --> J;
+    M -- Uses Pod Identity for workload access --> N;
+    N -- Grants least-privilege access --> M;
+    M -- Accesses Provisioned Infra --> Q;
+```
