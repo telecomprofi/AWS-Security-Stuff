@@ -106,3 +106,62 @@ graph TD;
     B-->D;
     C-->D;
 ```
+
+```mermaid
+graph TD
+    subgraph "Platform Engineer"
+        A[Platform Engineer initiates deployment via Humanitec Portal/CLI]
+    end
+
+    subgraph "Humanitec SaaS"
+        B(Humanitec Orchestrator)
+    end
+
+    subgraph "Customer AWS Account"
+        subgraph "EKS Cluster (Private)"
+            C(Humanitec Agent)
+            D(Humanitec Operator)
+            E(opentofu-container-runner Pod)
+            F(Application Pod)
+            G(EKS API Server - Private Endpoint)
+            H(Pod Identity)
+        end
+        subgraph "AWS Services"
+            I[AWS IAM]
+            J[AWS Secrets Manager]
+            K[Provisioned Infrastructure e.g., RDS]
+        end
+    end
+
+    subgraph "External Services"
+        L[GitHub SSO]
+        M[GitHub 'platform' Repo with Terraform code]
+        N[GitHub Deploy Token]
+    end
+
+    A -- GitHub SSO --> L
+    A -- Triggers Deployment --> B
+    B --'call-home' via Agent--> C
+    C -- Delivers CRDs --> G
+    D -- Watches for CRDs --> G
+    D -- Starts opentofu-container-runner Job --> G
+    E -- Uses GitHub Deploy Token --> N
+    N -- Grants Access --> M
+    E -- Checks out Terraform code --> M
+    B -- Provides Cloud Account Details --> E
+    E -- Assumes IAM Role via External ID --> I
+    I -- Grants Temporary Credentials --> E
+    E -- Uses Temporary Credentials --> K
+    E -- Provisions Infrastructure --> K
+
+    D -- Accesses Secrets --> J
+    I -- Allows Operator to Assume Role --> D
+    H -- Enables Pod to Assume Role --> D
+    J -- Provides Secrets --> D
+    D -- Creates K8s Secrets --> G
+    F -- Mounts K8s Secrets --> G
+    B -- Deploys Application Image --> G
+    F -- Uses Pod Identity --> H
+    H -- Grants least-privilege access --> F
+    F -- Accesses Provisioned Infra --> K
+```
