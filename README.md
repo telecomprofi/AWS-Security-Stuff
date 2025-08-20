@@ -1,3 +1,40 @@
+```mermaid
+graph LR
+    subgraph "ServiceNow / Zendesk"
+        A[User Submits Request Form] --> B{Manager Approval};
+        B -->|Approved| C[Ticket Assigned to Automation];
+        B -->|Denied| D[Notify User & Close Ticket];
+        C --> E{Automation Trigger};
+        M[User Confirms Access] --> N[Ticket Solved/Closed];
+        R[Add 'Access Provisioned' Comment] --> M;
+        S[Add Internal 'Failure' Note & Notify Team];
+    end
+
+    subgraph "workato.com Automation"
+        E --> W[Workato Recipe Triggered];
+        W --> X[Create PR in GitHub];
+    end
+
+    subgraph "GitHub / Git Provider"
+        X --> Y{Platform Engineer Reviews PR};
+        Y -->|Approved| Z[Merge PR & Trigger CI/CD];
+        Y -->|Rejected| S;
+    end
+
+    subgraph "CI/CD Pipeline"
+        Z --> AA[Apply IaC Changes];
+        AA -->|Success| R;
+        AA -->|Failure| S;
+    end
+
+    style A fill:#cde4ff,stroke:#333,stroke-width:2px
+    style N fill:#d4edda,stroke:#333,stroke-width:2px
+    style D fill:#f8d7da,stroke:#333,stroke-width:2px
+    style S fill:#f8d7da,stroke:#333,stroke-width:2px
+    style W fill:#fff3cd,stroke:#333,stroke-width:2px
+    style Y fill:#fff3cd,stroke:#333,stroke-width:2px
+```
+
 # Were to start with recommended security settings and controls for Startup & AWS Org
 
 - [AWS Startup Security Baseline](https://docs.aws.amazon.com/prescriptive-guidance/latest/aws-startup-security-baseline/welcome.html)
